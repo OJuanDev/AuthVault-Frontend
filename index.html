@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthVault — Enterprise Identity</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Auth View Container -->
+        <div id="auth-container" class="auth-card fade-in">
+            <!-- Left Side: Narrative -->
+            <div class="side-panel">
+                <div class="logo-container">
+                    <div class="logo-hex"></div>
+                    <span class="logo-text">AUTHVAULT</span>
+                </div>
+                
+                <div class="panel-content">
+                    <h2 id="side-title">Gestão de Identidade Próxima Geração.</h2>
+                    <p id="side-desc">Uma infraestrutura robusta para controle de acesso sob demanda, protegida por criptografia assimétrica de nível militar.</p>
+                </div>
+
+                <div class="panel-footer">
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">© 2026 AuthVault Systems Inc.</p>
+                </div>
+            </div>
+
+            <!-- Right Side: Forms -->
+            <div class="form-area">
+                <!-- Login -->
+                <div id="login-view">
+                    <div class="form-header">
+                        <h3>Acesso ao Cofre</h3>
+                        <p>Insira suas credenciais para continuar.</p>
+                    </div>
+                    <div id="login-error" class="error-vibe"></div>
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label class="input-label">E-mail Corporativo</label>
+                            <input type="email" id="login-email" placeholder="nome@empresa.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Senha de Acesso</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="auth-btn" id="login-btn">Autenticar</button>
+                    </form>
+                    
+                    <div style="margin-top: 24px; display: flex; gap: 12px;">
+                        <button class="auth-btn" onclick="loginWithGoogle()" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18"> Google
+                        </button>
+                        <button class="auth-btn" onclick="loginWithGithub()" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <img src="https://www.svgrepo.com/show/512317/github-142.svg" width="18" style="filter: invert(1);"> GitHub
+                        </button>
+                    </div>
+
+                    <p style="margin-top: 32px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <button class="link-btn" onclick="showView('forgot')">Esqueci minha senha</button><br>
+                        Novo por aqui? <button class="link-btn" onclick="showView('signup')">Solicitar acesso</button>
+                    </p>
+                </div>
+
+                <!-- Signup -->
+                <div id="signup-view" style="display: none;">
+                    <div class="form-header">
+                        <h3>Solicitar Registro</h3>
+                        <p>Crie sua identidade digital no AuthVault.</p>
+                    </div>
+                    <div id="signup-error" class="error-vibe"></div>
+                    <form id="signup-form">
+                        <div class="input-group">
+                            <label class="input-label">Nome Completo</label>
+                            <input type="text" id="signup-name" placeholder="John Doe" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">E-mail</label>
+                            <input type="email" id="signup-email" placeholder="nome@empresa.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Senha Mestra</label>
+                            <input type="password" id="signup-password" placeholder="Mínimo 8 caracteres" required>
+                        </div>
+                        <button type="submit" class="auth-btn" id="signup-btn">Criar Conta</button>
+                    </form>
+                    <p style="margin-top: 32px; font-size: 0.9rem; color: var(--text-secondary);">
+                        Já possui acesso? <button class="link-btn" onclick="showView('login')">Fazer login</button>
+                    </p>
+                </div>
+
+                <!-- Forgot -->
+                <div id="forgot-view" style="display: none;">
+                    <div class="form-header">
+                        <h3>Recuperação</h3>
+                        <p>Enviaremos um token para o seu e-mail.</p>
+                    </div>
+                    <div id="forgot-error" class="error-vibe"></div>
+                    <div id="forgot-success" style="color: var(--success); margin-bottom: 20px; font-size: 0.9rem; display: none;"></div>
+                    <form id="forgot-form">
+                        <div class="input-group">
+                            <label class="input-label">E-mail Vinculado</label>
+                            <input type="email" id="forgot-email" required>
+                        </div>
+                        <button type="submit" class="auth-btn" id="forgot-btn">Enviar Token</button>
+                    </form>
+                    <p style="margin-top: 32px; font-size: 0.9rem;">
+                        <button class="link-btn" onclick="showView('login')">Voltar ao início</button>
+                    </p>
+                </div>
+
+                <!-- Reset -->
+                <div id="reset-view" style="display: none;">
+                    <div class="form-header">
+                        <h3>Redefinição</h3>
+                        <p>Configure sua nova senha de acesso.</p>
+                    </div>
+                    <div id="reset-error" class="error-vibe"></div>
+                    <form id="reset-form">
+                        <div class="input-group">
+                            <label class="input-label">Token de Segurança</label>
+                            <input type="text" id="reset-token" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Nova Senha</label>
+                            <input type="password" id="reset-password" required>
+                        </div>
+                        <button type="submit" class="auth-btn" id="reset-btn">Atualizar Senha</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View (Bento Style) -->
+        <div id="dashboard-view" style="display: none;" class="fade-in">
+            <div class="bento-grid">
+                <!-- Profile Item -->
+                <div class="bento-item item-large">
+                    <div style="display: flex; gap: 24px; align-items: center;">
+                        <div style="width: 80px; height: 80px; background: var(--surface-light); border-radius: 20px; border: 1px solid var(--border); display: flex; justify-content: center; align-items: center; font-size: 2rem;" id="user-initials">?</div>
+                        <div>
+                            <h2 style="font-size: 1.5rem; letter-spacing: -0.5px;">Sistema Online</h2>
+                            <p style="color: var(--text-secondary);">Bem-vindo ao seu painel de controle.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Item -->
+                <div class="bento-item">
+                    <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 20px;">Acesso Rápido</h4>
+                    <button onclick="handleLogout()" style="width: 100%; padding: 12px; background: var(--surface-light); border: 1px solid var(--border); color: white; border-radius: 12px; cursor: pointer; transition: 0.2s;">Encerrar Sessão</button>
+                    <button onclick="revokeAllSessions()" style="width: 100%; padding: 12px; background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.1); color: var(--error); border-radius: 12px; cursor: pointer; margin-top: 10px; transition: 0.2s;">Limpar Outros Dispositivos</button>
+                </div>
+
+                <!-- Sessions Item -->
+                <div class="bento-item item-large item-tall">
+                    <h3 style="margin-bottom: 24px; font-size: 1.25rem;">Dispositivos Conectados</h3>
+                    <div id="session-list">
+                        <!-- Sessions will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Security Status -->
+                <div class="bento-item item-tall">
+                    <h3 style="margin-bottom: 24px; font-size: 1.25rem;">Log de Auditoria</h3>
+                    <div id="audit-log-list" style="font-size: 0.75rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 12px; max-height: 350px; overflow-y: auto;">
+                        <!-- Logs injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
