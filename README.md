@@ -11,7 +11,7 @@ Este é o frontend oficial de exemplo para o ecossistema **AuthVault**. Uma inte
 ## 🔗 Repositório da API (Backend)
 Este frontend consome a API Core do AuthVault. Você precisará dela rodando para que a interface funcione:
 
-👉 **[AuthVault-Backend](https://github.com/OJuanDev/AuthVault)**
+👉 **[AuthVault-Backend](https://github.com/OJuanDev/AuthVault-Backend)**
 
 ---
 
